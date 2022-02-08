@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controller/home_controller.dart';
-import 'cart_screen.dart';
 
-class HomeScreen extends GetWidget<HomeController> {
-  //static String homeScreenRouteName = "/home";
+class HomeScreen extends StatelessWidget {
+  TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final controler = Get.find<HomeController>();
     return Scaffold(
       appBar: AppBar(title: Text("Home")),
       body: Center(
@@ -16,32 +16,23 @@ class HomeScreen extends GetWidget<HomeController> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Obx(() {
-              print("User status rebuild");
-              return Text("User status ${controller.status.value}");
-            }),
-            Obx(() {
-              print("Button rebuild");
-              return ElevatedButton(
-                  onPressed: () {
-                    controller.status.value.toLowerCase() == "online"
-                        ? controller.updateStatus("Offline")
-                        : controller.updateStatus("Online");
-                  },
-                  child: controller.status.toLowerCase() == "online"
-                      ? const Text("Logout")
-                      : const Text("Login"));
-            }),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: TextField(
+                decoration: const InputDecoration(hintText: "Email"),
+                controller: emailController,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
             ElevatedButton(
-                onPressed: () {
-                  controller.incrementCart();
-                },
-                child: Text("Cart incriment")),
-            ElevatedButton(
-                onPressed: () {
-                  Get.to(CartScreen());
-                },
-                child: Text("Go to Cart page"))
+              onPressed: () {
+                controler.updateEmail(emailController.text);
+              },
+              child: const Text("Submit"),
+            ),
+            Obx(() => Text("Your email : ${controler.email}")),
           ],
         ),
       ),
